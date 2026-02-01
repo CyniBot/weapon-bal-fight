@@ -56,6 +56,37 @@ const SwordCharacter = {
         }
     },
     
+    // Custom draw method for the sword weapon
+    onDrawWeapon(ctx, ball) {
+        ctx.translate(ball.x, ball.y);
+        
+        // Rotate sword based on movement direction
+        const angle = Math.atan2(ball.vy, ball.vx);
+        ctx.rotate(angle);
+        
+        // Draw sword handle (brown)
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(ball.radius - 5, -4, 10, 8);
+        
+        // Draw sword blade (silver/gray)
+        ctx.fillStyle = '#C0C0C0';
+        ctx.fillRect(ball.radius + 5, -3, 25, 6);
+        
+        // Draw sword tip (pointed)
+        ctx.beginPath();
+        ctx.moveTo(ball.radius + 30, 0);
+        ctx.lineTo(ball.radius + 25, -5);
+        ctx.lineTo(ball.radius + 25, 5);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Draw crossguard
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(ball.radius + 3, -6, 4, 12);
+        
+        ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+    },
+    
     // Called when hitting a wall
     onWallHit(ball, wallType) {
         // No special effect on wall hit
