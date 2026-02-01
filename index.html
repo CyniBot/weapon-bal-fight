@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon Ball Fight</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: #f5e6d3;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+
+        .title {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            text-align: center;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .game-container {
+            background: #f5e6d3;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .battle-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: clamp(0.5rem, 2vw, 0.8rem);
+            gap: 20px;
+        }
+
+        .fighter-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fighter-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border: 3px solid;
+        }
+
+        .fighter-card.player1 .fighter-icon { 
+            background: #999;
+            border-color: #666;
+            color: white;
+        }
+        
+        .fighter-card.player2 .fighter-icon { 
+            background: #f5e6d3;
+            border-color: #333;
+            color: #333;
+        }
+
+        .fighter-name {
+            font-size: clamp(0.7rem, 2vw, 1rem);
+            color: #333;
+        }
+
+        .vs-text {
+            font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+            color: #333;
+        }
+
+        .weapon-display {
+            font-size: clamp(0.6rem, 1.8vw, 0.9rem);
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .stats-container {
+            background: white;
+            border: 3px solid #333;
+            padding: 8px;
+            margin-bottom: 10px;
+            font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+            line-height: 1.8;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3px;
+        }
+
+        .stat-label {
+            color: #666;
+        }
+
+        .stat-value {
+            color: #333;
+            font-weight: bold;
+        }
+
+        #arena {
+            width: 100%;
+            height: 500px;
+            background: white;
+            border: 3px solid #333;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 10px;
+            image-rendering: pixelated;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: crisp-edges;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        button {
+            font-family: 'Press Start 2P', cursive;
+            font-size: clamp(0.5rem, 1.8vw, 0.75rem);
+            padding: 12px 20px;
+            background: white;
+            color: #333;
+            border: 3px solid #333;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background: #333;
+            color: white;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .weapon-select {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .weapon-btn {
+            font-size: clamp(0.45rem, 1.3vw, 0.6rem);
+            padding: 8px 15px;
+            background: white;
+            border: 2px solid #333;
+        }
+
+        .weapon-btn.active {
+            background: #333;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            #arena {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Load character files -->
+    <script src="characters/unarmed.js"></script>
+    
+    <h1 class="title">WEAPON BALL FIGHT</h1>
+    
+    <div class="game-container">
+        <div class="battle-info">
+            <div class="fighter-card player1">
+                <div class="fighter-icon">⚪</div>
+                <div>
+                    <div class="fighter-name">Unarmed</div>
+                    <div class="weapon-display" id="weapon1-display">VS ⚪ Unarmed</div>
+                </div>
+            </div>
+            
+            <div class="vs-text">VS</div>
+            
+            <div class="fighter-card player2">
+                <div>
+                    <div class="fighter-name" style="text-align: right;">Unarmed</div>
+                    <div class="weapon-display" style="text-align: right;" id="weapon2-display">⚪</div>
+                </div>
+                <div class="fighter-icon">⚪</div>
+            </div>
+        </div>
+
+        <div class="stats-container">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <div style="flex: 1;">
+                    <div class="stat-row">
+                        <span class="stat-label">HP:</span>
+                        <span class="stat-value" id="hp1-text">100</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Speed:</span>
+                        <span class="stat-value" id="speed1">5</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Damage:</span>
+                        <span class="stat-value" id="damage1">0</span>
+                    </div>
+                </div>
+                <div style="flex: 1; text-align: right;">
+                    <div class="stat-row">
+                        <span class="stat-label">HP:</span>
+                        <span class="stat-value" id="hp2-text">100</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Speed:</span>
+                        <span class="stat-value" id="speed2">5</span>
+                    </div>
+                    <div class="stat-row">
+                        <span class="stat-label">Damage:</span>
+                        <span class="stat-value" id="damage2">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="arena"></canvas>
+
+        <div class="controls">
+            <button id="startBtn">START</button>
+            <button id="pauseBtn">PAUSE</button>
+            <button id="resetBtn">RESET</button>
+        </div>
+
+        <div class="weapon-select" id="weaponSelect">
+            <!-- Buttons will be dynamically generated -->
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
