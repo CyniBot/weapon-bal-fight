@@ -184,10 +184,6 @@
     </style>
 </head>
 <body>
-    <!-- Load character files -->
-<script src="game.js"></script>
-<script src="characters/unarmed.js"></script>
-    
     <h1 class="title">WEAPON BALL FIGHT</h1>
     
     <div class="game-container">
@@ -257,5 +253,8 @@
         </div>
     </div>
 
+    <!-- Load scripts in correct order: game.js first, then character files -->
+    <script src="game.js"></script>
+    <script src="characters/unarmed.js"></script>
 </body>
 </html>
