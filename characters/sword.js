@@ -4,8 +4,8 @@ const SwordCharacter = {
     id: 'sword',
     name: 'Sword',
     icon: '🗡️',
-    color: '#ff6b6b',
-    borderColor: '#c92a2a',
+    color: '#FA8072', // Salmon color
+    borderColor: '#E9967A', // Dark salmon border
     description: 'Sword deals 1 more damage each attack. Reliable damage scaling.',
     
     // Sword weapon
@@ -64,11 +64,35 @@ const SwordCharacter = {
         const angle = Math.atan2(ball.vy, ball.vx);
         ctx.rotate(angle);
         
-        // Draw sword emoji
-        ctx.font = '40px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('🗡️', ball.radius + 15, 0);
+        // Calculate red tint based on damage (starts at 5, increases by 1 each hit)
+        const damageLevel = ball.swordDamage - 5; // How many hits above base
+        const redAmount = Math.min(255, 192 + damageLevel * 8); // Start at C0 (192), max at 255
+        const otherColors = Math.max(0, 192 - damageLevel * 12); // Reduce silver as it gets redder
+        const bladeColor = `rgb(${redAmount}, ${otherColors}, ${otherColors})`;
+        
+        // Draw sword handle (brown)
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(ball.radius - 5, -4, 10, 8);
+        
+        // Draw sword guard (yellow/gold)
+        ctx.fillStyle = '#FFD700';
+        ctx.fillRect(ball.radius + 3, -7, 4, 14);
+        
+        // Draw sword blade (silver that turns red)
+        ctx.fillStyle = bladeColor;
+        ctx.fillRect(ball.radius + 7, -3, 25, 6);
+        
+        // Draw sword tip (pointed)
+        ctx.beginPath();
+        ctx.moveTo(ball.radius + 32, 0);
+        ctx.lineTo(ball.radius + 27, -4);
+        ctx.lineTo(ball.radius + 27, 4);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Add shine effect to blade (white highlight)
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+        ctx.fillRect(ball.radius + 9, -2, 18, 2);
         
         ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
     },
