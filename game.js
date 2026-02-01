@@ -12,7 +12,7 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 // Physics constants
-const GRAVITY = 0.2;
+const GRAVITY = 0.5;
 
 // Available characters registry
 const CHARACTERS = {};
@@ -163,6 +163,13 @@ function updateCharacterDisplay(player) {
 function drawBall(ball) {
     const char = ball.character;
     
+    ctx.save();
+    
+    // Call character's custom draw method if it exists (for weapons/attachments)
+    if (char.onDrawWeapon) {
+        char.onDrawWeapon(ctx, ball);
+    }
+    
     // Ball body
     ctx.fillStyle = char.color;
     ctx.beginPath();
@@ -180,6 +187,8 @@ function drawBall(ball) {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(Math.ceil(ball.hp), ball.x, ball.y);
+    
+    ctx.restore();
 }
 
 function drawProjectile(proj) {
