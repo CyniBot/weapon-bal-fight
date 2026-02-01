@@ -76,10 +76,9 @@ const UnarmedCharacter = {
             endGame(otherBall === ball1 ? 2 : 1);
         }
         
-        // Increase speed and damage by 0.5 on successful hit
+        // Increase speed by 0.5 on successful hit (damage scales automatically from speed)
         ball.hitCount++;
         ball.speed = Math.min(ball.speed + 0.5, ball.maxSpeed);
-        ball.damage += 0.5;
         
         // Also increase max speed by 0.5
         ball.maxSpeed += 0.5;
