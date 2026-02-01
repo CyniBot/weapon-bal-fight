@@ -1,6 +1,5 @@
 // Unarmed Character
 // Gains speed and damage with every hit, deals damage based on current speed
-
 const UnarmedCharacter = {
     id: 'unarmed',
     name: 'Unarmed',
