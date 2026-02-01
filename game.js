@@ -12,7 +12,7 @@ resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
 
 // Physics constants
-const GRAVITY = 0.5;
+const GRAVITY = 0.2;
 
 // Available characters registry
 const CHARACTERS = {};
@@ -203,6 +203,21 @@ function drawProjectile(proj) {
     } else if (sprite === 'bullet') {
         ctx.fillStyle = proj.color;
         ctx.fillRect(-size/2, -size/2, size, size);
+    } else if (sprite === 'sword') {
+        ctx.rotate(Math.atan2(proj.vy, proj.vx) + Math.PI / 4);
+        ctx.fillStyle = proj.color;
+        // Draw sword blade
+        ctx.fillRect(-15, -3, 30, 6);
+        // Draw sword tip
+        ctx.beginPath();
+        ctx.moveTo(15, 0);
+        ctx.lineTo(10, -5);
+        ctx.lineTo(10, 5);
+        ctx.closePath();
+        ctx.fill();
+        // Draw sword handle
+        ctx.fillStyle = '#8B4513';
+        ctx.fillRect(-18, -2, 8, 4);
     }
     
     ctx.restore();
@@ -358,6 +373,14 @@ function updateProjectiles() {
             if (dist < target.radius + proj.size / 2) {
                 target.hp = Math.max(0, target.hp - proj.damage);
                 updateHP(target);
+                
+                // Trigger onProjectileHit callback for the owner
+                if (proj.owner.character && proj.owner.character.onProjectileHit) {
+                    proj.owner.character.onProjectileHit(proj.owner, target);
+                    // Update owner's display after projectile hit
+                    updateCharacterDisplay(proj.owner === ball1 ? 1 : 2);
+                }
+                
                 projectiles.splice(i, 1);
                 
                 // Knockback
