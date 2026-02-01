@@ -444,15 +444,23 @@ function resetGame() {
     // Reset balls
     ball1.x = canvas.width * 0.25;
     ball1.y = canvas.height / 2;
-    ball1.vx = 4;
-    ball1.vy = 0;
+    
+    // Random direction and speed for ball1
+    const angle1 = Math.random() * Math.PI * 2; // Random angle 0-360 degrees
+    const speed1 = 3 + Math.random() * 4; // Random speed between 3-7
+    ball1.vx = Math.cos(angle1) * speed1;
+    ball1.vy = Math.sin(angle1) * speed1;
     ball1.hitCount = 0;
     ball1.lastShot = 0;
     
     ball2.x = canvas.width * 0.75;
     ball2.y = canvas.height / 2;
-    ball2.vx = -3;
-    ball2.vy = 0;
+    
+    // Random direction and speed for ball2
+    const angle2 = Math.random() * Math.PI * 2; // Random angle 0-360 degrees
+    const speed2 = 3 + Math.random() * 4; // Random speed between 3-7
+    ball2.vx = Math.cos(angle2) * speed2;
+    ball2.vy = Math.sin(angle2) * speed2;
     ball2.hitCount = 0;
     ball2.lastShot = 0;
     
